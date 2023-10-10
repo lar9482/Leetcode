@@ -1,0 +1,58 @@
+class Solution(object):
+    def checkInclusion(self, s1, s2):
+        """
+        :type s1: str
+        :type s2: str
+        :rtype: bool
+        """
+        if (len(s1) > len(s2)):
+            return False
+
+        s1Dict = self.calculateS1Dict(s1)
+        currDict = self.calculateInitialCurrDict(s1, s2)
+
+        start = 0
+        end = len(s1)
+        while (end < len(s2)):
+
+            if (self.matchingDicts(s1Dict, currDict)):
+                return True
+            
+            currDict[s2[start]] -= 1
+            currDict[s2[end]] += 1
+
+            start += 1
+            end += 1
+        
+        if (self.matchingDicts(s1Dict, currDict)):
+            return True
+
+        return False
+    
+    def calculateS1Dict(self, s1):
+        s1Dict = self.initializeCharDict()
+
+        for i in range(0, len(s1)):
+            s1Dict[s1[i]] += 1
+        
+        return s1Dict
+    
+    def calculateInitialCurrDict(self, s1, s2):
+        currDict = self.initializeCharDict()
+
+        for i in range(0, len(s1)):
+            currDict[s2[i]] += 1
+        
+        return currDict
+
+    def matchingDicts(self, s1Dict, currDict):
+        for i in list(s1Dict.keys()):
+            if (s1Dict[i] != currDict[i]):
+                return False
+        
+        return True
+
+    def initializeCharDict(self):
+        charDict = {}
+        for i in range(97, 123):
+            charDict[chr(i)] = 0
